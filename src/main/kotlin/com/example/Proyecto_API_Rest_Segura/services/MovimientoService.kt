@@ -2,6 +2,7 @@ package com.example.Proyecto_API_Rest_Segura.services
 
 import com.example.Proyecto_API_Rest_Segura.model.Movimiento
 import com.example.Proyecto_API_Rest_Segura.repository.MovimientoRepository
+import com.example.Proyecto_API_Rest_Segura.utils.Tipos
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -12,6 +13,11 @@ class MovimientoService {
 
     @Autowired
     private lateinit var movimientoRepository: MovimientoRepository
+
+
+    private val tiposDisponibles = listOf(
+        Tipos.HADA.spanish
+    )
 
 
     fun populateMovimientosTable(){
@@ -104,7 +110,7 @@ class MovimientoService {
 
     fun getMovimientosByCategoria(categoria: String): List<Movimiento>?{
         val listaMovimientos = movimientoRepository.findAll()
-        when (categoria){
+        when (categoria.uppercase()){
             "FISICO" -> {
                 val listaFiltrada = listaMovimientos.filter { it.categoria == "Physical" }
                 return listaFiltrada
@@ -118,9 +124,29 @@ class MovimientoService {
                 return listaFiltrada
             }
             else -> {
-                return emptyList()
+                return emptyList() // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
             }
         }
+    }
+
+
+    fun filtradoPorCategoriaYTipo(categoria: String, tipo: String): List<Movimiento>?{
+
+        var validType = false
+        var formattedType = ""
+        for (type in Tipos.entries){
+            if (type.spanish == tipo.uppercase()){
+                validType = true
+                formattedType = type.original
+            }
+        }
+        if (validType){
+            val listaMovimientos = getMovimientosByCategoria(categoria)?.filter { it.tipo == formattedType } ?: emptyList()
+            return listaMovimientos
+        }
+
+        return emptyList() // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
+
     }
 
 }

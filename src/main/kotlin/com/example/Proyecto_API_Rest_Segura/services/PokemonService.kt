@@ -174,7 +174,7 @@ class PokemonService {
                 return pokemonRepository.findAll().filter { it.tipo1 == Tipos.LUCHA.original || it.tipo2 == Tipos.LUCHA.original }
             }
             else -> {
-                return emptyList()
+                return emptyList() // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
             }
         }
 

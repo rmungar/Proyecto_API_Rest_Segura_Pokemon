@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/movimientos")
 class MovimientoController {
 
+
     @Autowired
     private lateinit var movimientoService: MovimientoService
 
@@ -34,7 +35,7 @@ class MovimientoController {
                 return ResponseEntity<Any?>(HttpStatus.BAD_REQUEST)
             }
             else{
-                val movimiento = movimientoService.getMovimiento(id)
+                val movimiento = movimientoService.getMovimiento(id) ?: return ResponseEntity<Any?>(HttpStatus.NOT_FOUND)
                 return ResponseEntity<Any?>(movimiento, HttpStatus.OK)
             }
         }
@@ -76,6 +77,23 @@ class MovimientoController {
             return ResponseEntity<Any?>(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
 
+    }
+
+    @GetMapping("/categoria/{categoria}/tipo/{tipo}")
+    fun getMovimientosByCategoriaYTipo(
+        @PathVariable("categoria") categoria: String?,
+        @PathVariable("tipo") tipo: String?
+    ): ResponseEntity<Any?>{
+        try {
+            if (!categoria.isNullOrEmpty() && !tipo.isNullOrEmpty()){
+                val listaMovimientos = movimientoService.filtradoPorCategoriaYTipo(categoria, tipo)
+                return ResponseEntity(listaMovimientos, HttpStatus.OK)
+            }
+            return ResponseEntity("NI LA CATEGORÍA NI EL TIPO PUEDEN SER NULOS O ESTAR VACÍOS",HttpStatus.BAD_REQUEST) // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
+        }
+        catch (e:Exception){
+            return ResponseEntity<Any?>(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
 
