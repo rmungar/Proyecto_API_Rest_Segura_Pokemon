@@ -3,6 +3,7 @@ package com.example.Proyecto_API_Rest_Segura.services
 import com.example.Proyecto_API_Rest_Segura.model.Movimiento
 import com.example.Proyecto_API_Rest_Segura.repository.MovimientoRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.io.File
 
@@ -90,6 +91,15 @@ class MovimientoService {
             movimientoRepository.save(it)
         }
 
+    }
+
+
+    fun getMovimiento(id: String): Movimiento?{
+        return movimientoRepository.findByIdOrNull(id)
+    }
+
+    fun getAllMovimientos(): MutableList<Movimiento>?{
+        return movimientoRepository.findAll()
     }
 
 

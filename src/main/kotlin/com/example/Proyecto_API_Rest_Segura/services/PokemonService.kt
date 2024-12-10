@@ -3,6 +3,7 @@ package com.example.Proyecto_API_Rest_Segura.services
 import com.example.Proyecto_API_Rest_Segura.model.Pokemon
 import com.example.Proyecto_API_Rest_Segura.repository.PokemonRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.io.File
 
@@ -106,5 +107,11 @@ class PokemonService {
         }
     }
 
+    fun getPokemonById(id: Int): Pokemon? {
+        return pokemonRepository.findByIdOrNull(id)
+    }
 
+    fun getAllPokemon(): List<Pokemon>?{
+        return pokemonRepository.findAll()
+    }
 }
