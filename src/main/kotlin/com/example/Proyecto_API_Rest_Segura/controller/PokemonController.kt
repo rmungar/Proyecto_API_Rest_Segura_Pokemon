@@ -2,6 +2,7 @@ package com.example.Proyecto_API_Rest_Segura.controller
 
 import com.example.Proyecto_API_Rest_Segura.model.Pokemon
 import com.example.Proyecto_API_Rest_Segura.services.PokemonService
+import com.example.Proyecto_API_Rest_Segura.utils.Tipos
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -58,6 +59,23 @@ class PokemonController {
         }
     }
 
+    @GetMapping("/tipo/{tipo}")
+    fun getPokemonByTipo(
+        @PathVariable("tipo") tipo: String?
+    ): ResponseEntity<Any?>{
+        try {
+            if (tipo != null){
+                val listaPokemon = pokemonService.getByType(tipo.uppercase())
+                return ResponseEntity(listaPokemon, HttpStatus.OK)
+            }
+            else{
+                return ResponseEntity(HttpStatus.BAD_REQUEST)
+            }
+        }
+        catch (e: Exception){
+            return ResponseEntity(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 
 
 }

@@ -102,5 +102,25 @@ class MovimientoService {
         return movimientoRepository.findAll()
     }
 
+    fun getMovimientosByCategoria(categoria: String): List<Movimiento>?{
+        val listaMovimientos = movimientoRepository.findAll()
+        when (categoria){
+            "FISICO" -> {
+                val listaFiltrada = listaMovimientos.filter { it.categoria == "Physical" }
+                return listaFiltrada
+            }
+            "ESPECIAL" -> {
+                val listaFiltrada = listaMovimientos.filter { it.categoria == "Special" }
+                return listaFiltrada
+            }
+            "ESTADO" -> {
+                val listaFiltrada = listaMovimientos.filter { it.categoria == "Status" }
+                return listaFiltrada
+            }
+            else -> {
+                return emptyList()
+            }
+        }
+    }
 
 }

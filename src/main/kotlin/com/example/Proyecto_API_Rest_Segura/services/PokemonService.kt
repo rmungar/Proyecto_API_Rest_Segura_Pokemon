@@ -2,6 +2,7 @@ package com.example.Proyecto_API_Rest_Segura.services
 
 import com.example.Proyecto_API_Rest_Segura.model.Pokemon
 import com.example.Proyecto_API_Rest_Segura.repository.PokemonRepository
+import com.example.Proyecto_API_Rest_Segura.utils.Tipos
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -113,5 +114,71 @@ class PokemonService {
 
     fun getAllPokemon(): List<Pokemon>?{
         return pokemonRepository.findAll()
+    }
+
+    fun getByType(tipo: String): List<Pokemon>?{
+
+        when (tipo) {
+            Tipos.FUEGO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.FUEGO.original || it.tipo2 == Tipos.FUEGO.original }
+            }
+            Tipos.AGUA.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.AGUA.original || it.tipo2 == Tipos.AGUA.original }
+            }
+            Tipos.PLANTA.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.PLANTA.original || it.tipo2 == Tipos.PLANTA.original }
+            }
+            Tipos.ELECTRICO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.ELECTRICO.original || it.tipo2 == Tipos.ELECTRICO.original }
+            }
+            Tipos.TIERRA.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.TIERRA.original || it.tipo2 == Tipos.TIERRA.original }
+            }
+            Tipos.ROCA.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.ROCA.original || it.tipo2 == Tipos.ROCA.original }
+            }
+            Tipos.ACERO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.ACERO.original || it.tipo2 == Tipos.ACERO.original }
+            }
+            Tipos.HADA.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.HADA.original || it.tipo2 == Tipos.HADA.original }
+            }
+            Tipos.SINIESTRO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.SINIESTRO.original || it.tipo2 == Tipos.SINIESTRO.original }
+            }
+            Tipos.PSIQUICO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.PSIQUICO.original || it.tipo2 == Tipos.PSIQUICO.original }
+            }
+            Tipos.FANTASMA.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.FANTASMA.original || it.tipo2 == Tipos.FANTASMA.original }
+            }
+            Tipos.DRAGON.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.DRAGON.original || it.tipo2 == Tipos.DRAGON.original }
+            }
+            Tipos.HIELO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.HADA.original || it.tipo2 == Tipos.HIELO.original }
+            }
+            Tipos.BICHO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.BICHO.original || it.tipo2 == Tipos.BICHO.original }
+            }
+            Tipos.NORMAL.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.NORMAL.original || it.tipo2 == Tipos.NORMAL.original }
+            }
+            Tipos.VOLADOR.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.VOLADOR.original || it.tipo2 == Tipos.VOLADOR.original }
+            }
+            Tipos.VENENO.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.VENENO.original || it.tipo2 == Tipos.VENENO.original }
+            }
+            Tipos.LUCHA.spanish -> {
+                return pokemonRepository.findAll().filter { it.tipo1 == Tipos.LUCHA.original || it.tipo2 == Tipos.LUCHA.original }
+            }
+            else -> {
+                return emptyList()
+            }
+        }
+
+
+        return null
     }
 }
