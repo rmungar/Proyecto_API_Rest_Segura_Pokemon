@@ -11,7 +11,7 @@ import jakarta.persistence.Table
 class Movimiento(
     @Id
     val nombre: String,
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     val descripcion: String,
     @Column(nullable = false)
     val tipo: String,

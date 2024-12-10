@@ -34,7 +34,7 @@ class PokemonService {
                         if (types.size > 1){
                             pokemonList.add(
                                 Pokemon(
-                                    idPokemon = 0,
+                                    idPokemon = null,
                                     nombre = name ?: "",
                                     descripcion = pokedexDescription ?: "",
                                     tipo1 = types[0],
@@ -48,7 +48,7 @@ class PokemonService {
                         else{
                             pokemonList.add(
                                 Pokemon(
-                                    idPokemon = 0,
+                                    idPokemon = null,
                                     nombre = name ?: "",
                                     descripcion = pokedexDescription ?: "",
                                     tipo1 = types[0],
@@ -89,7 +89,7 @@ class PokemonService {
         if (name != null && pokedexDescription != null) {
             pokemonList.add(
                 Pokemon(
-                    idPokemon = 0,
+                    idPokemon = null,
                     nombre = name ?: "",
                     descripcion = pokedexDescription ?: "",
                     tipo1 = types[0],

@@ -10,7 +10,7 @@ class Pokemon(
     val idPokemon: Int?,
     @Column(nullable = false)
     val nombre: String,
-    @Column(nullable = false)
+    @Column(nullable = false ,length = 1000)
     var descripcion: String,
     @Column(nullable = false)
     var tipo1: String,
