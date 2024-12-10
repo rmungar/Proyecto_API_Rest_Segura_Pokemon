@@ -46,3 +46,44 @@ CREATE TABLE Usuarios (
   rol VARCHAR(25)
 );
 ```
+
+# Punto 3 - Los Endpoints
+
+ **Pokemon**
+
+  - **GET** `/pokemon`:
+    Devuelve una lista con todos los pokemons que hay en la base de datos.
+
+  - **POST** `/pokemon`:
+    Repoblará la tabla correspondiente de la base de datos con nuevos datos.
+
+  - **GET** `/pokemon/{id}`:
+    Devolverá el pokemon correspondiente al id.
+    Lanza una excepcion si el id no exite o no es válido.
+
+  - **GET** `/pokemon/tipo/{tipo}`:
+    Devolverá una lista de todos los pokemons los cuales uno de sus tipos coincide con el tipo ingresado.
+    Lanza una excepcion si el tipo no exite o no es válido.
+
+ **Movimientos**
+
+  - **GET** `/movimientos`:
+    Devuelve una lista con todos los movimientos que hay en la base de datos.
+
+  - **POST** `/movimientos`:
+    Repoblará la tabla correspondiente de la base de datos con nuevos datos.
+
+  - **GET** `/movimientos/{id}`:
+    Devuelve el movimiento correspondiente al id.
+    Lanza una excepcion si el id no exite o no es válido.
+
+  - **GET** `/movimientos/categoria/{categoria}`:
+    Devuelve una lista de movimientos cuya categoría (Físico, Especial, Estado) se corresponde con la ingresada.
+    Lanza una excepción si la categoría no existe o no es válida.
+
+  - **GET** `/movimientos/tipo/{tipo}`:
+    Devuelve una lista de movimientos cuyo tipo corresponda con el deseado.
+    Lanza una excepcion si el tipo no exite o no es válido.
+
+  - **GET** /categoria/{categoria}/tipo/{tipo}``:
+    Devuelve una lista de movimientos cuyos categoria y tipo coincidan con los deseados.
