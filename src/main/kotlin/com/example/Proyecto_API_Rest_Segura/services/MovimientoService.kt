@@ -15,11 +15,6 @@ class MovimientoService {
     private lateinit var movimientoRepository: MovimientoRepository
 
 
-    private val tiposDisponibles = listOf(
-        Tipos.HADA.spanish
-    )
-
-
     fun populateMovimientosTable(){
         val movimientoFilePath = "src/main/resources/static/moves.txt"
         val moveList = mutableListOf<Movimiento>()
