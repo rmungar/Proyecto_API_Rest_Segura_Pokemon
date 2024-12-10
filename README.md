@@ -85,5 +85,5 @@ CREATE TABLE Usuarios (
     Devuelve una lista de movimientos cuyo tipo corresponda con el deseado.
     Lanza una excepcion si el tipo no exite o no es válido.
 
-  - **GET** /categoria/{categoria}/tipo/{tipo}``:
+  - **GET** `/categoria/{categoria}/tipo/{tipo}`:
     Devuelve una lista de movimientos cuyos categoria y tipo coincidan con los deseados.
