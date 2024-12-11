@@ -79,6 +79,26 @@ class MovimientoController {
 
     }
 
+
+    @GetMapping("/tipo/{tipo}")
+    fun getMovimientosByTipo(
+        @PathVariable("tipo") tipo: String?
+    ): ResponseEntity<Any?>{
+        try{
+            if (!tipo.isNullOrEmpty()) {
+                val listaMovimientos = movimientoService.getMovimientosByTipo(tipo.uppercase())
+                return ResponseEntity<Any?>(listaMovimientos, HttpStatus.OK)
+            }
+            else{
+                return ResponseEntity<Any?>("LA CATEGORÍA NO PUEDE SER NULA O ESTAR VACÍA", HttpStatus.BAD_REQUEST)
+            }
+        }
+        catch (e:Exception){
+            return ResponseEntity<Any?>(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+    }
+
     @GetMapping("/categoria/{categoria}/tipo/{tipo}")
     fun getMovimientosByCategoriaYTipo(
         @PathVariable("categoria") categoria: String?,

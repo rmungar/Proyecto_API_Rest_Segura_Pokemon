@@ -103,7 +103,7 @@ class MovimientoService {
         return movimientoRepository.findAll()
     }
 
-    fun getMovimientosByCategoria(categoria: String): List<Movimiento>?{
+    fun getMovimientosByCategoria(categoria: String): List<Movimiento>{
         val listaMovimientos = movimientoRepository.findAll()
         when (categoria.uppercase()){
             "FISICO" -> {
@@ -125,22 +125,41 @@ class MovimientoService {
     }
 
 
-    fun filtradoPorCategoriaYTipo(categoria: String, tipo: String): List<Movimiento>?{
 
+    fun getMovimientosByTipo(tipo: String): List<Movimiento>{
         var validType = false
         var formattedType = ""
         for (type in Tipos.entries){
-            if (type.spanish == tipo.uppercase()){
+            if (type.spanish == tipo){
                 validType = true
                 formattedType = type.original
             }
         }
         if (validType){
-            val listaMovimientos = getMovimientosByCategoria(categoria)?.filter { it.tipo == formattedType } ?: emptyList()
-            return listaMovimientos
+            return movimientoRepository.findAll().filter { it.tipo == formattedType }
+        }
+        else{
+            return  emptyList() // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
         }
 
-        return emptyList() // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
+    }
+
+    fun filtradoPorCategoriaYTipo(categoria: String, tipo: String): List<Movimiento>{
+
+        val movimientosPorTipos = getMovimientosByTipo(tipo)
+        val movimientosPorCategoria = getMovimientosByCategoria(categoria)
+        val listaFinal = mutableListOf<Movimiento>()
+        if (movimientosPorTipos.isNotEmpty() && movimientosPorCategoria.isNotEmpty()){
+            for (movimiento in movimientosPorTipos){
+                if (movimientosPorCategoria.contains(movimiento)){
+                    listaFinal.add(movimiento)
+                }
+            }
+            return listaFinal
+        }
+        else{
+            return emptyList() // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
+        }
 
     }
 
