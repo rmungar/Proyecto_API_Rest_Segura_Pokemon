@@ -1,16 +1,13 @@
 package com.example.Proyecto_API_Rest_Segura.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 
 @Entity
 @Table(name = "movimientos")
 class Movimiento(
     @Id
-    val nombre: String,
+    val nombreMovimiento: String,
     @Column(nullable = false, length = 1000)
     val descripcion: String,
     @Column(nullable = false)
@@ -25,6 +22,6 @@ class Movimiento(
     val usos: Int
 ) {
     override fun toString(): String {
-        return "$nombre ; $descripcion; $tipo ; $categoria ; $potencia ; $precision ; $usos"
+        return "$nombreMovimiento ; $descripcion; $tipo ; $categoria ; $potencia ; $precision ; $usos"
     }
 }

@@ -48,6 +48,8 @@ class PokemonController {
         }
     }
 
+
+
     @GetMapping("/")
     fun getAllPokemon(): ResponseEntity<Any?>{
         try {
@@ -58,6 +60,8 @@ class PokemonController {
             return ResponseEntity(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+
 
     @GetMapping("/tipo/{tipo}")
     fun getPokemonByTipo(
@@ -78,4 +82,22 @@ class PokemonController {
     }
 
 
+
+    @GetMapping("/generacion/{generacion}")
+    fun getPokemonByGeneracion(
+        @PathVariable("generacion") generacion: Int?
+    ): ResponseEntity<Any?>{
+        try{
+            if (generacion != null){
+                val listaPokemon = pokemonService.getByGen(generacion)
+                return ResponseEntity(listaPokemon, HttpStatus.OK)
+            }
+            else{
+                return ResponseEntity(HttpStatus.BAD_REQUEST)
+            }
+        }
+        catch (e: Exception){
+            return ResponseEntity(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 }

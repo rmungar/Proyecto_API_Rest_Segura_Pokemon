@@ -2,6 +2,7 @@ package com.example.Proyecto_API_Rest_Segura.model
 
 import jakarta.persistence.*
 
+
 @Entity
 @Table(name = "pokemon")
 class Pokemon(
@@ -24,6 +25,6 @@ class Pokemon(
     val generacion: Int
 ) {
     override fun toString(): String {
-        return "$nombre ; $tipo1 ; $tipo2 ; $descripcion ; $legendario ; $generacion"
+        return "$idPokemon ; $nombre ; $tipo1 ; $tipo2 ; $descripcion ; $legendario ; $generacion"
     }
 }
