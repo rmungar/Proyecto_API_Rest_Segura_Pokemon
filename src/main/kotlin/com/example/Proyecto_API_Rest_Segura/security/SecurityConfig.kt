@@ -9,6 +9,7 @@ import com.nimbusds.jose.proc.SecurityContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
@@ -39,8 +40,11 @@ class SecurityConfig {
             .csrf { it.disable() } // CROSS-SITE FORGERY
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/pokemon/**").permitAll()
-                    .anyRequest().permitAll()
+                    .requestMatchers(HttpMethod.GET,"/pokemon/").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/pokemon/").authenticated()
+                    .requestMatchers("/pokemon/{id}").permitAll()
+                    .requestMatchers("/pokemon/tipo/{tipo}").permitAll()
+                    .anyRequest().authenticated()
             } // LOS RECURSOS PROTEGIDO Y PUBLICOS
             .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } //

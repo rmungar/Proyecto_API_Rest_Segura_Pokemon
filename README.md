@@ -51,10 +51,10 @@ CREATE TABLE Usuarios (
 
  **Pokemon**
 
-  - **GET** `/pokemon`:
+  - **GET** `/pokemon/`:
     Devuelve una lista con todos los pokemons que hay en la base de datos.
 
-  - **POST** `/pokemon`:
+  - **POST** `/pokemon/`:
     Repoblará la tabla correspondiente de la base de datos con nuevos datos.
 
   - **GET** `/pokemon/{id}`:

@@ -1,8 +1,6 @@
 package com.example.Proyecto_API_Rest_Segura.controller
 
-import com.example.Proyecto_API_Rest_Segura.model.Pokemon
 import com.example.Proyecto_API_Rest_Segura.services.PokemonService
-import com.example.Proyecto_API_Rest_Segura.utils.Tipos
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
