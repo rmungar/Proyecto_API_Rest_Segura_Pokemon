@@ -50,6 +50,7 @@ class SecurityConfig {
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } //
             .httpBasic(Customizer.withDefaults())
             .build()
+
     }
 
 
