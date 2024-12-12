@@ -3,8 +3,6 @@
 # Punto 1 - La idea
   La idea de esta API consiste en una "implementación" de la *PokéAPI* de forma mas sencilla. En mi caso, cuento con un archivo de texto plano en el cual figuran todos los datos de todos y cada uno de los     pokemons y movimientos. Por lo que he pensado poblar la base de datos con los datos que ya hay en los documentos para luego poder realizar las llamadas pertinentes. La idea sería una aplicación muy          parecida a la DataDex o la wiki de pokémon.
 
-> [!WARNING]
-> En el archivo no figuran las imágenes de los pokemons.
   
 # Punto 2 - Las tablas
   **Pokemons**
@@ -64,6 +62,10 @@ CREATE TABLE Usuarios (
   - **GET** `/pokemon/tipo/{tipo}`:
     Devolverá una lista de todos los pokemons los cuales uno de sus tipos coincide con el tipo ingresado.
     Lanza una excepcion si el tipo no exite o no es válido.
+
+  - **GET** `/pokemon/generacion/{generacion}`:
+    Devolverá una lista de todos los pokemons cuya generación coincida con la ingresada.
+    Lanza una excepción si la generación no existe.
 
  **Movimientos**
 
