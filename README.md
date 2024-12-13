@@ -57,11 +57,19 @@ CREATE TABLE Usuarios (
 
   - **GET** `/pokemon/{id}`:
     Devolverá el pokemon correspondiente al id.
-    Lanza una ParameterException si el id no exite o no es válido.
+    Lanza una ParameterException si el id no existe o no es válido.
+
+  - **PUT** `/pokemon/{id}`:
+    Actualizará el pokemon cuyo id se corresponda con el pasado por parámetro con los datos.
+    Lanza una ParameterException si el id o el cuerpo de la petición no existen o no son válidos.
+
+  - **DELETE** `/pokemon/{id}`:
+    Eliminará el pokemon correspondiente al id.
+    Lanza una ParameterException si el id no existe o no es válido.
 
   - **GET** `/pokemon/tipo/{tipo}`:
     Devolverá una lista de todos los pokemons los cuales uno de sus tipos coincide con el tipo ingresado.
-    Lanza una ParameterException si el tipo no exite o no es válido.
+    Lanza una ParameterException si el tipo no existe o no es válido.
 
   - **GET** `/pokemon/generacion/{generacion}`:
     Devolverá una lista de todos los pokemons cuya generación coincida con la ingresada.
@@ -77,7 +85,15 @@ CREATE TABLE Usuarios (
 
   - **GET** `/movimientos/{id}`:
     Devuelve el movimiento correspondiente al id.
-    Lanza una ParameterException si el id no exite o no es válido.
+    Lanza una ParameterException si el id no existe o no es válido.
+
+  - **PUT** `/movimientos/{id}`:
+    Actualizará el movimiento cuyo id se corresponda con el pasado por parámetro con los datos.
+    Lanza una ParameterException si el id o el cuerpo de la petición no existen o no son válidos.
+
+  - **DELETE** `/movimientos/{id}`:
+    Eliminará el movimiento correspondiente al id.
+    Lanza una ParameterException si el id no existe o no es válido.   
 
   - **GET** `/movimientos/categoria/{categoria}`:
     Devuelve una lista de movimientos cuya categoría (Físico, Especial, Estado) se corresponde con la ingresada.
@@ -85,7 +101,7 @@ CREATE TABLE Usuarios (
 
   - **GET** `/movimientos/tipo/{tipo}`:
     Devuelve una lista de movimientos cuyo tipo corresponda con el deseado.
-    Lanza una ParameterException si el tipo no exite o no es válido.
+    Lanza una ParameterException si el tipo no existe o no es válido.
 
   - **GET** `/categoria/{categoria}/tipo/{tipo}`:
     Devuelve una lista de movimientos cuyos categoria y tipo coincidan con los deseados.
@@ -96,7 +112,14 @@ CREATE TABLE Usuarios (
     Procederá a registrar al usuario en la base de datos, los datos del usuario serán pasados por el cuerpo de la petición.
     Devolverá una ParameterException si el cuerpo de la función esta vacío, o un usuario en el caso de un registro correcto.
 
-
   - **GET** `/usuarios/login`:
     Procederá a realizar el login con los datos de un usuario que serán pasados a través del cuerpo de la petición.
     Devolverá un token en caso positivo y una ParameterExcepetion en caso de que el cuerpo de la petición esté vacío.
+
+  - **PUT** `/usuarios/usuario`:
+    Actualizará los datos del usuario cuyo id coincida con el id del pasado por el cuerpo de la petición.
+    Lanzará una ParameterException si el cuerpo de la función contiene un valor no válido o no existe.
+
+  - **DELETE** `/usuarios/{id}`:
+    Eliminará el usuario cuyo id coincida con el id pasado por parámetro.
+    Lanzará una ParameterException si el cuerpo de la función contiene un valor no válido o no existe.
