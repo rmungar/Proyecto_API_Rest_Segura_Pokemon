@@ -13,5 +13,5 @@ class Usuario(
     @Column(name = "password", nullable = false)
     var password: String? = null,
     @Column(name = "role", nullable = false)
-    var role: String? = null
+    var roles: String? = null
 )

@@ -1,5 +1,7 @@
 package com.example.Proyecto_API_Rest_Segura.controller
 
+import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
+import com.example.Proyecto_API_Rest_Segura.model.Movimiento
 import com.example.Proyecto_API_Rest_Segura.services.MovimientoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -79,7 +81,6 @@ class MovimientoController {
 
     }
 
-
     @GetMapping("/tipo/{tipo}")
     fun getMovimientosByTipo(
         @PathVariable("tipo") tipo: String?
@@ -113,6 +114,31 @@ class MovimientoController {
         }
         catch (e:Exception){
             return ResponseEntity<Any?>(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    @PutMapping("/{id}")
+    fun updateMovimiento(
+        @PathVariable("id") id: String?,
+        @RequestBody movimiento: Movimiento?
+    ): ResponseEntity<Any?> {
+        if (id != null && movimiento != null) {
+            val movimientoUpdateado = movimientoService.updateMovimiento(id, movimiento)
+            return ResponseEntity(movimientoUpdateado, HttpStatus.OK)
+        }
+        else
+            throw ParameterException("Ni el parametro id ni el cuerpo de la petición pueden estar vacíos")
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteMovimiento(
+        @PathVariable("id") id: String?,
+    ): ResponseEntity<Any?>{
+        if (id != null) {
+            movimientoService.deleteMovimiento(id)
+            return ResponseEntity(HttpStatus.OK)
+        }else{
+            throw ParameterException("El parámetro id no puede estar vacío")
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.Proyecto_API_Rest_Segura.services
 
 import com.example.Proyecto_API_Rest_Segura.exception.FileNotFoundException
+import com.example.Proyecto_API_Rest_Segura.exception.NotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
 import com.example.Proyecto_API_Rest_Segura.model.Pokemon
 import com.example.Proyecto_API_Rest_Segura.repository.PokemonRepository
@@ -194,4 +195,34 @@ class PokemonService {
             throw ParameterException("La generacion: $generacion no existe.")
         }
     }
+
+    fun updatePokemon(id: Int, pokemon: Pokemon): Pokemon{
+        val existingPokemon = pokemonRepository.findById(id)
+
+        existingPokemon.ifPresent {
+            it.descripcion = pokemon.descripcion
+            it.tipo1 = pokemon.tipo1
+            it.tipo2 = pokemon.tipo2
+            it.habilidad = pokemon.habilidad
+            it.legendario = it.legendario
+            it.generacion = pokemon.generacion
+        }
+        pokemonRepository.save(existingPokemon.get())
+        if (existingPokemon.isEmpty){
+            throw ParameterException("No se ha encontrado un pokemon con el id: $id")
+        }
+        return existingPokemon.get()
+    }
+
+    fun deletePokemon(id: Int): Pokemon{
+        val pokemon = getPokemonById(id)
+        if (pokemon == null){
+            throw NotFoundException("No se ha encontrado ningún pokemon con el id: $id")
+        }
+        else{
+            pokemonRepository.delete(pokemon)
+            return pokemon
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.Proyecto_API_Rest_Segura.services
 
 import com.example.Proyecto_API_Rest_Segura.exception.FileNotFoundException
+import com.example.Proyecto_API_Rest_Segura.exception.NotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
 import com.example.Proyecto_API_Rest_Segura.model.Movimiento
 import com.example.Proyecto_API_Rest_Segura.repository.MovimientoRepository
@@ -101,7 +102,6 @@ class MovimientoService {
 
     }
 
-
     fun getMovimiento(id: String): Movimiento?{
         return movimientoRepository.findByIdOrNull(id)
     }
@@ -130,8 +130,6 @@ class MovimientoService {
             }
         }
     }
-
-
 
     fun getMovimientosByTipo(tipo: String): List<Movimiento>{
         var validType = false
@@ -173,4 +171,33 @@ class MovimientoService {
 
     }
 
+    fun updateMovimiento(id: String, movimiento: Movimiento): Movimiento? {
+        val movimientoExistente = getMovimiento(id)
+
+        if (movimientoExistente != null){
+            movimientoExistente.tipo = movimiento.tipo
+            movimientoExistente.categoria = movimiento.categoria
+            movimientoExistente.descripcion = movimiento.descripcion
+            movimientoExistente.potencia = movimiento.potencia
+            movimientoExistente.precision = movimiento.precision
+            movimientoExistente.usos = movimiento.usos
+        }
+        else{
+            throw ParameterException("No existe ningun movimiento con el id $id")
+        }
+        movimientoRepository.save(movimientoExistente)
+        return movimientoExistente
+    }
+
+    fun deleteMovimiento(id: String){
+
+        val movimiento = getMovimiento(id)
+        if (movimiento != null){
+            movimientoRepository.delete(movimiento)
+        }
+        else{
+            throw NotFoundException("No existe ningún movimiento con el id $id")
+        }
+
+    }
 }

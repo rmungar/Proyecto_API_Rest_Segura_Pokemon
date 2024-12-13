@@ -20,9 +20,9 @@ class Pokemon(
     @Column(nullable = false)
     var habilidad: String,
     @Column(nullable = false)
-    val legendario: Boolean,
+    var legendario: Boolean,
     @Column(nullable = false)
-    val generacion: Int
+    var generacion: Int
 ) {
     override fun toString(): String {
         return "$idPokemon ; $nombre ; $tipo1 ; $tipo2 ; $descripcion ; $legendario ; $generacion"

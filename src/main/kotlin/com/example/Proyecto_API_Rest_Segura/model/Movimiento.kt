@@ -9,17 +9,17 @@ class Movimiento(
     @Id
     val nombreMovimiento: String,
     @Column(nullable = false, length = 1000)
-    val descripcion: String,
+    var descripcion: String,
     @Column(nullable = false)
-    val tipo: String,
+    var tipo: String,
     @Column(nullable = false)
-    val categoria: String,
+    var categoria: String,
     @Column(nullable = false)
-    val potencia: Int,
+    var potencia: Int,
     @Column(nullable = false)
-    val precision: Int,
+    var precision: Int,
     @Column(nullable = false)
-    val usos: Int
+    var usos: Int
 ) {
     override fun toString(): String {
         return "$nombreMovimiento ; $descripcion; $tipo ; $categoria ; $potencia ; $precision ; $usos"

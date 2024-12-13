@@ -26,7 +26,7 @@ class TokenService {
             .issuedAt(Instant.now())
             .expiresAt(Date().toInstant().plus(Duration.ofHours(1)))
             .subject(authentication.name)
-            .claim("rol", rol)
+            .claim("roles", roles)
             .build()
 
         return jwtEncoder.encode(JwtEncoderParameters.from(payload)).tokenValue

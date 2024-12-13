@@ -1,5 +1,7 @@
 package com.example.Proyecto_API_Rest_Segura.controller
 
+import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
+import com.example.Proyecto_API_Rest_Segura.model.Pokemon
 import com.example.Proyecto_API_Rest_Segura.services.PokemonService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -98,4 +100,33 @@ class PokemonController {
             return ResponseEntity(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+
+    @PutMapping("/{id}")
+    fun updatePokemon(
+        @PathVariable("id") id: Int?,
+        @RequestBody pokemon: Pokemon?
+    ): ResponseEntity<Any?>{
+        if (id != null && pokemon != null){
+            pokemonService.updatePokemon(id, pokemon)
+            return ResponseEntity(pokemon, HttpStatus.OK)
+        }
+        else{
+            throw ParameterException("Ni el parámetro id, ni el cuerpo de la petición pueden estar vacíos")
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletePokemon(
+        @PathVariable("id") id: Int?
+    ): ResponseEntity<Any?>{
+        if(id != null){
+            val pokemon = pokemonService.deletePokemon(id)
+            return ResponseEntity(pokemon, HttpStatus.OK)
+        }
+        else{
+            throw ParameterException("El parámetro id no puede ser nulo")
+        }
+    }
+
 }

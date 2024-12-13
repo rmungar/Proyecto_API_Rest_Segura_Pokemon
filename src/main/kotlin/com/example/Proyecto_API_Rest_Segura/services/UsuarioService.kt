@@ -1,5 +1,6 @@
 package com.example.Proyecto_API_Rest_Segura.services
 
+import com.example.Proyecto_API_Rest_Segura.exception.NotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
 import com.example.Proyecto_API_Rest_Segura.model.Usuario
 import com.example.Proyecto_API_Rest_Segura.repository.UsuarioRepository
@@ -38,13 +39,13 @@ class UsuarioService: UserDetailsService {
         if (usuario.password!!.isEmpty() || usuario.password!!.isBlank()) {
             throw ParameterException("La contraseña: ${usuario.password} no es válida.")
         }
-        if (usuario.role == null){
+        if (usuario.roles == null){
             throw ParameterException("El parámetro rol no puede ser nulo")
         }
-        if (usuario.role!!.uppercase() != "ADMIN" && usuario.role!!.uppercase() != "USER"){
-            throw ParameterException("El rol: ${usuario.role} no es válido.")
+        if (usuario.roles!!.uppercase() != "ADMIN" && usuario.roles!!.uppercase() != "USER"){
+            throw ParameterException("El rol: ${usuario.roles} no es válido.")
         }
-        usuario.role = usuario.role!!.uppercase()
+        usuario.roles = usuario.roles!!.uppercase()
         usuario.password = passwordEncoder.encode(usuario.password)
         usuarioRepository.save(usuario)
         return usuario
@@ -54,7 +55,7 @@ class UsuarioService: UserDetailsService {
     override fun loadUserByUsername(userName: String?): UserDetails {
         val usuario = usuarioRepository.findByUsername(userName!!).orElseThrow()
 
-        val roles = usuario.role?.map { SimpleGrantedAuthority("ROLE_${it}") }
+        val roles = usuario.roles?.map { SimpleGrantedAuthority("ROLE_${it}") }
             ?.toList() ?: listOf()
 
         return User
@@ -81,18 +82,28 @@ class UsuarioService: UserDetailsService {
         if (usuario.password!!.isEmpty() || usuario.password!!.isBlank()) {
             throw ParameterException("La contraseña: ${usuario.password} no es válida.")
         }
-        if (usuario.role == null){
+        if (usuario.roles == null){
             throw ParameterException("El parámetro rol no puede ser nulo")
         }
-        if (usuario.role!!.uppercase() != "ADMIN" && usuario.role!!.uppercase() != "USER"){
-            throw ParameterException("El rol: ${usuario.role} no es válido.")
+        if (usuario.roles!!.uppercase() != "ADMIN" && usuario.roles!!.uppercase() != "USER"){
+            throw ParameterException("El rol: ${usuario.roles} no es válido.")
         }
 
 
         usuarioExistente.username = usuario.username
         usuarioExistente.password = passwordEncoder.encode(usuario.password)
-        usuarioExistente.role = usuario.role
+        usuarioExistente.roles = usuario.roles
         usuarioRepository.save(usuarioExistente)
         return usuario
+    }
+
+
+    fun deleteUser(id: Int) {
+        try{
+            usuarioRepository.deleteById(id)
+        }
+        catch (e: Exception){
+            throw NotFoundException("No se ha encontrado este usuario")
+        }
     }
 }

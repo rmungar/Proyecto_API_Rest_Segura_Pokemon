@@ -46,7 +46,7 @@ class UsuarioController {
 
         if (usuario != null) {
             val authentication: Authentication
-            authentication =authenticationManager.authenticate(UsernamePasswordAuthenticationToken(usuario.username, usuario.password))
+            authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(usuario.username, usuario.password))
             val token = tokenService.generarToken(authentication)
             return ResponseEntity(mapOf("Token" to token), HttpStatus.OK)
         }
@@ -64,5 +64,18 @@ class UsuarioController {
         }
         throw ParameterException("El parámetro usuario no puede estar vacío.")
     }
+
+    @DeleteMapping("/usuario/{id}")
+    fun deleteUser(
+        @PathVariable("id") id: Int?
+    ){
+        if (id != null) {
+            usuarioService.deleteUser(id)
+        }
+        else{
+            throw ParameterException("El parámetro id no puede estar vacío.")
+        }
+    }
+
 
 }

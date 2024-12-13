@@ -42,17 +42,24 @@ class SecurityConfig {
                 it
                     .requestMatchers(HttpMethod.GET,"/pokemon/").permitAll()
                     .requestMatchers(HttpMethod.POST,"/pokemon/").authenticated()
-                    .requestMatchers("/pokemon/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/pokemon/{id}").permitAll()
+                    .requestMatchers(HttpMethod.PUT,"/pokemon/{id}").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST,"/pokemon/{id}").hasRole("ADMIN")
                     .requestMatchers("/pokemon/tipo/{tipo}").permitAll()
+
                     .requestMatchers(HttpMethod.GET,"/movimientos/").permitAll()
                     .requestMatchers(HttpMethod.POST,"/movimientos/").authenticated()
-                    .requestMatchers("/movimientos/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/movimientos/{id}").permitAll()
+                    .requestMatchers(HttpMethod.PUT,"/movimientos/{id}").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST,"/movimientos/{id}").hasRole("ADMIN")
                     .requestMatchers("/movimientos/tipo/{tipo}").permitAll()
                     .requestMatchers("/movimientos/categoria/{categoria}").permitAll()
                     .requestMatchers("/movimientos/categoria/{categoria}/tipo/{tipo}").permitAll()
+
                     .requestMatchers("/usuarios/register").permitAll()
                     .requestMatchers("/usuarios/login").permitAll()
-                    .requestMatchers(HttpMethod.PUT,"/usuarios/usuario").authenticated()
+                    .requestMatchers(HttpMethod.PUT,"/usuarios/usuario").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.DELETE,"/usuarios/{id}").hasRole("ADMIN")
                     .anyRequest().authenticated()
             } // LOS RECURSOS PROTEGIDO Y PUBLICOS
             .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }
