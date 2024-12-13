@@ -15,7 +15,7 @@ CREATE TABLE Pokemons (
     tipo1 VARCHAR(15) NOT NULL,
     tipo2 VARCHAR(15),
     habilidad VARCHAR(30) NOT NULL,
-    movmimientos Movimientos NOT NULL,
+    movmimientos Movimiento NOT NULL,
     legendario BOOLEAN NOT NULL,
     generacion INTEGER NOT NULL
 );
@@ -39,7 +39,7 @@ CREATE TABLE Movimientos (
 ```sql
 CREATE TABLE Usuarios (
   idUsuario INTEGER PRIMARY KEY,
-  nombre VARCHAR(50) NOT NULL,
+  username VARCHAR(50) NOT NULL,
   password VARCHAR(50) NOT NULL,
   rol VARCHAR(25)
 );
@@ -57,15 +57,15 @@ CREATE TABLE Usuarios (
 
   - **GET** `/pokemon/{id}`:
     Devolverá el pokemon correspondiente al id.
-    Lanza una excepcion si el id no exite o no es válido.
+    Lanza una ParameterException si el id no exite o no es válido.
 
   - **GET** `/pokemon/tipo/{tipo}`:
     Devolverá una lista de todos los pokemons los cuales uno de sus tipos coincide con el tipo ingresado.
-    Lanza una excepcion si el tipo no exite o no es válido.
+    Lanza una ParameterException si el tipo no exite o no es válido.
 
   - **GET** `/pokemon/generacion/{generacion}`:
     Devolverá una lista de todos los pokemons cuya generación coincida con la ingresada.
-    Lanza una excepción si la generación no existe.
+    Lanza una ParameterException si la generación no existe.
 
  **Movimientos**
 
@@ -77,15 +77,26 @@ CREATE TABLE Usuarios (
 
   - **GET** `/movimientos/{id}`:
     Devuelve el movimiento correspondiente al id.
-    Lanza una excepcion si el id no exite o no es válido.
+    Lanza una ParameterException si el id no exite o no es válido.
 
   - **GET** `/movimientos/categoria/{categoria}`:
     Devuelve una lista de movimientos cuya categoría (Físico, Especial, Estado) se corresponde con la ingresada.
-    Lanza una excepción si la categoría no existe o no es válida.
+    Lanza una ParameterException si la categoría no existe o no es válida.
 
   - **GET** `/movimientos/tipo/{tipo}`:
     Devuelve una lista de movimientos cuyo tipo corresponda con el deseado.
-    Lanza una excepcion si el tipo no exite o no es válido.
+    Lanza una ParameterException si el tipo no exite o no es válido.
 
   - **GET** `/categoria/{categoria}/tipo/{tipo}`:
     Devuelve una lista de movimientos cuyos categoria y tipo coincidan con los deseados.
+
+ **Usuarios**
+
+  - **POST** `/usuarios/register`:
+    Procederá a registrar al usuario en la base de datos, los datos del usuario serán pasados por el cuerpo de la petición.
+    Devolverá una ParameterException si el cuerpo de la función esta vacío, o un usuario en el caso de un registro correcto.
+
+
+  - **GET** `/usuarios/login`:
+    Procederá a realizar el login con los datos de un usuario que serán pasados a través del cuerpo de la petición.
+    Devolverá un token en caso positivo y una ParameterExcepetion en caso de que el cuerpo de la petición esté vacío.

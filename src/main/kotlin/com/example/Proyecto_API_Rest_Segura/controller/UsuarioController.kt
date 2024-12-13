@@ -54,5 +54,15 @@ class UsuarioController {
     }
 
 
+    @PutMapping("/usuario")
+    fun updateUser(
+        @RequestBody usuario: Usuario?
+    ): ResponseEntity<Any?> {
+        if (usuario != null) {
+            val usuarioUpdateado = usuarioService.updateUser(usuario)
+            return ResponseEntity(usuarioUpdateado, HttpStatus.OK)
+        }
+        throw ParameterException("El parámetro usuario no puede estar vacío.")
+    }
 
 }

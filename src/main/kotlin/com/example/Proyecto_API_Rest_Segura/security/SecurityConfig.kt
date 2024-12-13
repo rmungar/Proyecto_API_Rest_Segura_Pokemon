@@ -44,6 +44,15 @@ class SecurityConfig {
                     .requestMatchers(HttpMethod.POST,"/pokemon/").authenticated()
                     .requestMatchers("/pokemon/{id}").permitAll()
                     .requestMatchers("/pokemon/tipo/{tipo}").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/movimientos/").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/movimientos/").authenticated()
+                    .requestMatchers("/movimientos/{id}").permitAll()
+                    .requestMatchers("/movimientos/tipo/{tipo}").permitAll()
+                    .requestMatchers("/movimientos/categoria/{categoria}").permitAll()
+                    .requestMatchers("/movimientos/categoria/{categoria}/tipo/{tipo}").permitAll()
+                    .requestMatchers("/usuarios/register").permitAll()
+                    .requestMatchers("/usuarios/login").permitAll()
+                    .requestMatchers(HttpMethod.PUT,"/usuarios/usuario").hasRole("ADMIN")
                     .anyRequest().authenticated()
             } // LOS RECURSOS PROTEGIDO Y PUBLICOS
             .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }

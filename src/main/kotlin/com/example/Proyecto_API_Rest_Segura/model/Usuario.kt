@@ -9,7 +9,7 @@ class Usuario(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int?,
     @Column(name = "userName", nullable = false, length = 20)
-    val username: String? = null,
+    var username: String? = null,
     @Column(name = "password", nullable = false)
     var password: String? = null,
     @Column(name = "role", nullable = false)
