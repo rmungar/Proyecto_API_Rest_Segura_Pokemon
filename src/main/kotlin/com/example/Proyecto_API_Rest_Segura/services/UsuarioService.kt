@@ -67,7 +67,7 @@ class UsuarioService: UserDetailsService {
 
 
     fun updateUser(usuario: Usuario): Usuario {
-        val usuarioExistente = usuarioRepository.findByUsername(usuario.username!!).orElseThrow{ ParameterException("El usuario buscado no existe en la base de datos") }
+        val usuarioExistente = usuarioRepository.findById(usuario.id!!).orElseThrow{ ParameterException("El usuario buscado no existe en la base de datos") }
 
         if (usuario.username == null){
             throw ParameterException("El nombre no puede ser nulo.")

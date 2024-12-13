@@ -52,7 +52,7 @@ class SecurityConfig {
                     .requestMatchers("/movimientos/categoria/{categoria}/tipo/{tipo}").permitAll()
                     .requestMatchers("/usuarios/register").permitAll()
                     .requestMatchers("/usuarios/login").permitAll()
-                    .requestMatchers(HttpMethod.PUT,"/usuarios/usuario").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT,"/usuarios/usuario").authenticated()
                     .anyRequest().authenticated()
             } // LOS RECURSOS PROTEGIDO Y PUBLICOS
             .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }
