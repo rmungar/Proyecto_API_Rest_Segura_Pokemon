@@ -86,7 +86,12 @@ class PokemonService {
 
                     trimmedLine.startsWith("Flags =") -> isLegendary = trimmedLine.split(",").any { it.trim() in listOf("Legendary", "Paradox", "Mythical", "Ultra Beast") }
 
-                    trimmedLine.startsWith("Generation =") -> generation = trimmedLine.substringAfter("Generation =").trim().toInt()
+                    trimmedLine.startsWith("Generation =") -> {
+                        generation = trimmedLine.substringAfter("Generation =").trim().toInt()
+                        if (generation !in 1..9){
+                            throw ParameterException("La generación $generation no existe.")
+                        }
+                    }
 
                 }
             }

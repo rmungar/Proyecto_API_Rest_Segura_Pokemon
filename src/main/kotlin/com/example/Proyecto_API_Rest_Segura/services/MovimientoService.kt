@@ -70,11 +70,35 @@ class MovimientoService {
 
                     trimmedLine.startsWith("Category =") -> category = trimmedLine.substringAfter("Category =").trim()
 
-                    trimmedLine.startsWith("Power =") -> power = trimmedLine.substringAfter("Power =").trim().toIntOrNull()
+                    trimmedLine.startsWith("Power =") -> {
+                        power = trimmedLine.substringAfter("Power =").trim().toIntOrNull()
+                        if (power!! < 0){
+                            throw ParameterException("El valor del poder del movimiento no puede ser inferior a 0")
+                        }
+                        if (power!! > 999){
+                            throw ParameterException("El valor del poder del movimiento no puede ser superior a 999")
+                        }
+                    }
 
-                    trimmedLine.startsWith("Accuracy =") -> accuracy = trimmedLine.substringAfter("Accuracy =").trim().toIntOrNull()
+                    trimmedLine.startsWith("Accuracy =") -> {
+                        accuracy = trimmedLine.substringAfter("Accuracy =").trim().toIntOrNull()
+                        if (accuracy!! < 0){
+                            throw ParameterException("El valor de la precision del movimiento $name no puede ser inferior a 0")
+                        }
+                        if (accuracy!! > 100){
+                            throw ParameterException("El valor de la precision del movimiento $name no puede ser inferior a 0")
+                        }
+                    }
 
-                    trimmedLine.startsWith("TotalPP =") -> totalPP = trimmedLine.substringAfter("TotalPP =").trim().toInt()
+                    trimmedLine.startsWith("TotalPP =") -> {
+                        totalPP = trimmedLine.substringAfter("TotalPP =").trim().toInt()
+                        if (totalPP < 0){
+                            throw ParameterException("El valor de los usos del movimiento $name no pueden ser inferiores a 0")
+                        }
+                        if (totalPP > 99){
+                            throw ParameterException("El valor de los usos del movimiento $name no pueden ser superior a 99")
+                        }
+                    }
                 }
             }
 

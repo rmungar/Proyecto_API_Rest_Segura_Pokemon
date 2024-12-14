@@ -31,6 +31,17 @@ CREATE TABLE Pokemons (
 | **legendario**  | BOOLEAN          | NOT NULL          |
 | **generacion**  | INTEGER          | NOT NULL          |
 
+### **_Comprobaciones en la capa service_**
+
+* El campo `nombre` no puede estar vacío. 
+* El campo `descripcion` no puede estar vacío o su longitud ser mayor que 1000.
+* El campo`tipo1`no puede estar vacío y ha de encontrarse en la enum class `Tipos`.
+* El campo `tipo2` si puede estar vacío.
+* El campo `habilidad` no puede estar vacío.
+* El campo `legendario` no puede estar vacío.
+* El campo `generación` no puede estar vacío, ser superior a 9 o inferior a 1.
+
+
 
 
 ##  **Movimientos**
@@ -53,11 +64,20 @@ CREATE TABLE Movimientos (
 | **descripcion**  | VARCHAR(1000)  | NOT NULL          |
 | **tipo**         | VARCHAR(15)    | NOT NULL          |
 | **categoria**    | VARCHAR(30)    | NOT NULL          |
-| **poder**        | INTEGER(3)     |                   |
-| **precision**    | INTEGER(3)     |                   |
-| **usos**         | INTEGER(2)     |                   |
+| **poder**        | INTEGER(3)     | NOT NULL          |
+| **precision**    | INTEGER(3)     | NOT NULL          |
+| **usos**         | INTEGER(2)     | NOT NULL          |
 
 
+### **_Comprobaciones en la capa service_**
+
+* El campo `nombre` no puede estar vacío o su longitud superar 100 caracteres.
+* El campo `descripcion` no puede estar vacío o su longitud ser mayor que 1000 caracteres.
+* El campo`tipo`no puede estar vacío y ha de encontrarse en la enum class `Tipos`.
+* El campo `categoria` no puede estar vacío o no ser `FISICA`, `ESPECIAL` o `ESTADO`.
+* El campo `poder` no puede estar vacío, ser un número mayor a 999 o menor a 0.
+* El campo `precision` no puede estar vacío o ser un número mayor a 100 o menor a 0.
+* El campo `usos` no puede estar vacío o ser un número mayor a 99 o menor a 0.
 
 
 ## **Usuarios**
@@ -70,14 +90,19 @@ CREATE TABLE Usuarios (
 );
 ```
 
-| **Campo**      | **Valor**     | **RESTRICCIONES** |
-|----------------|---------------|-------------------|
-| **idUsuario**  | INTEGER       | PRIMARY KEY       |
-| **username**   | VARCHAR(50)   | NOT NULL          |
-| **password**   | VARCHAR(50)   | NOT NULL          |
-| **rol**        | VARCHAR(25)   |                   |
+| **Campo**      | **Valor**      | **RESTRICCIONES** |
+|----------------|----------------|-------------------|
+| **idUsuario**  | INTEGER        | PRIMARY KEY       |
+| **username**   | VARCHAR(50)    | NOT NULL          |
+| **password**   | VARCHAR(50)    | NOT NULL          |
+| **roles**      | VARCHAR(25)    |                   |
 
 
+### **_Comprobaciones en la capa service_**
+
+* El campo `username` no puede estar vacío o tener una longitud mayor a 50.
+* El campo `password` no puede estar vacío o su longitud ser mayor que 50.
+* El campo`roles`no puede estar vacío y ha de ser **ADMIN** o **USER**.
 
 
 
