@@ -52,21 +52,21 @@ CREATE TABLE Movimientos (
     descripcion VARCHAR(1000) NOT NULL,
     tipo VARCHAR(15) NOT NULL,
     categoria VARCHAR(30) NOT NULL,
-    poder INTEGER(3),
+    potencia INTEGER(3),
     precision INTEGER(3),
     usos INTEGER(2)
 );
 ```
 
-| **Campo**        | **Valor**      | **RESTRICCIONES** |
-|------------------|----------------|-------------------|
-| **nombre**       | VARCHAR(100)   | PRIMARY KEY       |
-| **descripcion**  | VARCHAR(1000)  | NOT NULL          |
-| **tipo**         | VARCHAR(15)    | NOT NULL          |
-| **categoria**    | VARCHAR(30)    | NOT NULL          |
-| **poder**        | INTEGER(3)     | NOT NULL          |
-| **precision**    | INTEGER(3)     | NOT NULL          |
-| **usos**         | INTEGER(2)     | NOT NULL          |
+| **Campo**       | **Valor**      | **RESTRICCIONES** |
+|-----------------|----------------|-------------------|
+| **nombre**      | VARCHAR(100)   | PRIMARY KEY       |
+| **descripcion** | VARCHAR(1000)  | NOT NULL          |
+| **tipo**        | VARCHAR(15)    | NOT NULL          |
+| **categoria**   | VARCHAR(30)    | NOT NULL          |
+| **potencia**    | INTEGER(3)     | NOT NULL          |
+| **precision**   | INTEGER(3)     | NOT NULL          |
+| **usos**        | INTEGER(2)     | NOT NULL          |
 
 
 ### **_Comprobaciones en la capa service_**
@@ -75,7 +75,7 @@ CREATE TABLE Movimientos (
 * El campo `descripcion` no puede estar vacío o su longitud ser mayor que 1000 caracteres.
 * El campo`tipo`no puede estar vacío y ha de encontrarse en la enum class `Tipos`.
 * El campo `categoria` no puede estar vacío o no ser `FISICA`, `ESPECIAL` o `ESTADO`.
-* El campo `poder` no puede estar vacío, ser un número mayor a 999 o menor a 0.
+* El campo `potencia` no puede estar vacío, ser un número mayor a 999 o menor a 0.
 * El campo `precision` no puede estar vacío o ser un número mayor a 100 o menor a 0.
 * El campo `usos` no puede estar vacío o ser un número mayor a 99 o menor a 0.
 
@@ -96,6 +96,11 @@ CREATE TABLE Usuarios (
 | **username**   | VARCHAR(50)    | NOT NULL          |
 | **password**   | VARCHAR(50)    | NOT NULL          |
 | **roles**      | VARCHAR(25)    |                   |
+
+## Modelo Entidad - Relación ##
+
+
+![](src/main/resources/static/E-R.drawio.png)
 
 
 ### **_Comprobaciones en la capa service_**
@@ -228,6 +233,8 @@ CREATE TABLE Usuarios (
 | GET        | /usuarios/login    | permitAll     |
 | PUT        | /usuarios/usuario  | ADMIN only    |
 | DELETE     | /usuarios/{id}     | ADMIN only    |
+
+
 
 
 

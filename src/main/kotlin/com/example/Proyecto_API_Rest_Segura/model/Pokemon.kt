@@ -17,6 +17,9 @@ class Pokemon(
     var tipo1: String,
     @Column
     var tipo2: String?,
+    @ElementCollection
+    @Column(nullable = false)
+    val movimientos: List<String> = mutableListOf(),
     @Column(nullable = false)
     var habilidad: String,
     @Column(nullable = false)

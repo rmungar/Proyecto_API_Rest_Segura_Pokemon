@@ -53,7 +53,7 @@ class MovimientoService {
                         }
 
                         // Reiniciamos los valores para el siguiente movimiento
-                        name = trimmedLine.removeSurrounding("[", "]")
+                        name = trimmedLine.removeSurrounding("[", "]")  // Aquí guardamos solo el nombre dentro de los corchetes
                         description = null
                         type = null
                         category = null
@@ -61,8 +61,6 @@ class MovimientoService {
                         accuracy = null
                         totalPP = 0
                     }
-
-                    trimmedLine.startsWith("Name =") -> name = trimmedLine.substringAfter("Name =").trim()
 
                     trimmedLine.startsWith("Description =") -> description = trimmedLine.substringAfter("Description =").trim()
 
@@ -72,31 +70,31 @@ class MovimientoService {
 
                     trimmedLine.startsWith("Power =") -> {
                         power = trimmedLine.substringAfter("Power =").trim().toIntOrNull()
-                        if (power!! < 0){
+                        if (power!! < 0) {
                             throw ParameterException("El valor del poder del movimiento no puede ser inferior a 0")
                         }
-                        if (power!! > 999){
+                        if (power!! > 999) {
                             throw ParameterException("El valor del poder del movimiento no puede ser superior a 999")
                         }
                     }
 
                     trimmedLine.startsWith("Accuracy =") -> {
                         accuracy = trimmedLine.substringAfter("Accuracy =").trim().toIntOrNull()
-                        if (accuracy!! < 0){
-                            throw ParameterException("El valor de la precision del movimiento $name no puede ser inferior a 0")
+                        if (accuracy!! < 0) {
+                            throw ParameterException("El valor de la precisión del movimiento $name no puede ser inferior a 0")
                         }
-                        if (accuracy!! > 100){
-                            throw ParameterException("El valor de la precision del movimiento $name no puede ser inferior a 0")
+                        if (accuracy!! > 100) {
+                            throw ParameterException("El valor de la precisión del movimiento $name no puede ser superior a 100")
                         }
                     }
 
                     trimmedLine.startsWith("TotalPP =") -> {
                         totalPP = trimmedLine.substringAfter("TotalPP =").trim().toInt()
-                        if (totalPP < 0){
+                        if (totalPP < 0) {
                             throw ParameterException("El valor de los usos del movimiento $name no pueden ser inferiores a 0")
                         }
-                        if (totalPP > 99){
-                            throw ParameterException("El valor de los usos del movimiento $name no pueden ser superior a 99")
+                        if (totalPP > 99) {
+                            throw ParameterException("El valor de los usos del movimiento $name no pueden ser superiores a 99")
                         }
                     }
                 }
@@ -116,6 +114,7 @@ class MovimientoService {
                     )
                 )
             }
+
             moveList.forEach {
                 movimientoRepository.save(it)
             }
@@ -123,6 +122,7 @@ class MovimientoService {
         catch (e: NullPointerException) {
             throw FileNotFoundException("src/main/resources/static/moves.txt")
         }
+
 
     }
 
@@ -215,7 +215,7 @@ class MovimientoService {
 
     fun deleteMovimiento(id: String){
 
-        val movimiento = getMovimiento(id)
+        val movimiento = getMovimiento(id.uppercase())
         if (movimiento != null){
             movimientoRepository.delete(movimiento)
         }

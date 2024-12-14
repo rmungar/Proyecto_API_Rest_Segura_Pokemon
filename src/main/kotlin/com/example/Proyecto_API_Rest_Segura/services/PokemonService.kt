@@ -3,8 +3,10 @@ package com.example.Proyecto_API_Rest_Segura.services
 import com.example.Proyecto_API_Rest_Segura.exception.FileNotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.NotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
+import com.example.Proyecto_API_Rest_Segura.model.Movimiento
 import com.example.Proyecto_API_Rest_Segura.model.Pokemon
 import com.example.Proyecto_API_Rest_Segura.repository.PokemonRepository
+import com.example.Proyecto_API_Rest_Segura.utils.PokemonFormateado
 import com.example.Proyecto_API_Rest_Segura.utils.Tipos
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -13,8 +15,12 @@ import java.io.File
 
 @Service
 class PokemonService {
+
     @Autowired
     private lateinit var pokemonRepository: PokemonRepository
+
+    @Autowired
+    private lateinit var movimientoService: MovimientoService
 
     fun poblatePokemonTable(){
         try{
@@ -28,52 +34,53 @@ class PokemonService {
             var isLegendary = false
             var generation = 0
             var abilities: List<String> = emptyList()
+            var lastMoves: List<String> = emptyList()
 
             file.forEachLine { line ->
                 val trimmedLine = line.trim()
 
                 when {
                     trimmedLine.startsWith("[") && trimmedLine.endsWith("]") -> {
-                        // Cuando encontramos una nueva entrada, almacenamos la anterior (si existe)
+                        // Guardar el Pokémon anterior si existe
                         if (name != null && pokedexDescription != null) {
-                            if (types.size > 1){
-                                pokemonList.add(
-                                    Pokemon(
-                                        idPokemon = null,
-                                        nombre = name ?: "",
-                                        descripcion = pokedexDescription ?: "",
-                                        tipo1 = types[0],
-                                        tipo2 = types[1],
-                                        legendario = isLegendary,
-                                        generacion = generation,
-                                        habilidad = abilities[0],
-                                    )
+
+                            val pokemon = if (types.size > 1) {
+                                Pokemon(
+                                    idPokemon = null,
+                                    nombre = name ?: "",
+                                    descripcion = pokedexDescription ?: "",
+                                    tipo1 = types[0],
+                                    tipo2 = types.getOrNull(1),
+                                    movimientos = lastMoves,
+                                    habilidad = abilities.getOrElse(0) { "" },
+                                    legendario = isLegendary,
+                                    generacion = generation
                                 )
-                            }
-                            else{
-                                pokemonList.add(
-                                    Pokemon(
-                                        idPokemon = null,
-                                        nombre = name ?: "",
-                                        descripcion = pokedexDescription ?: "",
-                                        tipo1 = types[0],
-                                        tipo2 = null,
-                                        legendario = isLegendary,
-                                        generacion = generation,
-                                        habilidad = abilities[0],
-                                    )
+                            } else {
+                                Pokemon(
+                                    idPokemon = null,
+                                    nombre = name ?: "",
+                                    descripcion = pokedexDescription ?: "",
+                                    tipo1 = types[0],
+                                    tipo2 = null,
+                                    movimientos = lastMoves,
+                                    habilidad = abilities.getOrElse(0) { "" },
+                                    legendario = isLegendary,
+                                    generacion = generation
                                 )
                             }
 
+                            pokemonList.add(pokemon)
                         }
 
-                        // Reiniciamos los valores para el siguiente Pokémon
+                        // Reiniciar valores para el siguiente Pokémon
                         name = trimmedLine.removeSurrounding("[", "]")
                         pokedexDescription = null
                         types = emptyList()
                         isLegendary = false
                         generation = 0
                         abilities = emptyList()
+                        lastMoves = emptyList()
                     }
 
                     trimmedLine.startsWith("Name =") -> name = trimmedLine.substringAfter("Name =").trim()
@@ -91,6 +98,11 @@ class PokemonService {
                         if (generation !in 1..9){
                             throw ParameterException("La generación $generation no existe.")
                         }
+                    }
+
+                    trimmedLine.startsWith("Moves=") -> {
+                        val moves = trimmedLine.substringAfter("Moves=").split(",").chunked(2) { it[1] } // Obtenemos solo los nombres de los movimientos
+                        lastMoves = moves.takeLast(4)
                     }
 
                 }
@@ -121,12 +133,58 @@ class PokemonService {
         }
     }
 
-    fun getPokemonById(id: Int): Pokemon? {
-        return pokemonRepository.findByIdOrNull(id)
+    fun getPokemonById(id: Int): PokemonFormateado? {
+        val pokemon = pokemonRepository.findByIdOrNull(id)
+        if (pokemon != null){
+            val listaMovimiento = mutableListOf<Movimiento>()
+            for (movimiento in pokemon.movimientos){
+                listaMovimiento.add(movimientoService.getMovimiento(movimiento)!!)
+            }
+            val pokemonFormateado = PokemonFormateado(
+                idPokemon = pokemon.idPokemon,
+                nombre = pokemon.nombre,
+                descripcion = pokemon.descripcion,
+                tipo1 = pokemon.tipo1,
+                tipo2 = pokemon.tipo2,
+                habilidad = pokemon.habilidad,
+                legendario = pokemon.legendario,
+                generacion = pokemon.generacion,
+                movimientos = listaMovimiento
+            )
+            return pokemonFormateado
+        }
+        else{
+            throw NotFoundException("No existe ese pokemon en la base de datos")
+        }
     }
 
-    fun getAllPokemon(): List<Pokemon>?{
-        return pokemonRepository.findAll()
+    fun getAllPokemon(): List<PokemonFormateado>?{
+        val lista = pokemonRepository.findAll()
+        if (lista.isNotEmpty()){
+            val listaFormateada = mutableListOf<PokemonFormateado>()
+            for (pokemon in lista){
+                val listaMovimiento = mutableListOf<Movimiento>()
+                for (movimiento in pokemon.movimientos){
+                    listaMovimiento.add(movimientoService.getMovimiento(movimiento)!!)
+                }
+                val pokemonFormateado = PokemonFormateado(
+                    idPokemon = pokemon.idPokemon,
+                    nombre = pokemon.nombre,
+                    descripcion = pokemon.descripcion,
+                    tipo1 = pokemon.tipo1,
+                    tipo2 = pokemon.tipo2,
+                    habilidad = pokemon.habilidad,
+                    legendario = pokemon.legendario,
+                    generacion = pokemon.generacion,
+                    movimientos = listaMovimiento
+                )
+                listaFormateada.add(pokemonFormateado)
+            }
+            return listaFormateada
+        }
+        else{
+            throw NotFoundException("No hay pokemon en la base de datos")
+        }
     }
 
     fun getByType(tipo: String): List<Pokemon>?{
@@ -220,7 +278,7 @@ class PokemonService {
     }
 
     fun deletePokemon(id: Int): Pokemon{
-        val pokemon = getPokemonById(id)
+        val pokemon = pokemonRepository.findByIdOrNull(id)
         if (pokemon == null){
             throw NotFoundException("No se ha encontrado ningún pokemon con el id: $id")
         }
