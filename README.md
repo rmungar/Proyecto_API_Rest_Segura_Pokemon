@@ -222,4 +222,8 @@ CREATE TABLE Usuarios (
 * **201 CREATED** Para acciones como el registro de un nuevo usuario o la adición de un nuevo pokemon o movimiento.
 * **401 UNAUTHORIZED** Cuando se intenta acceder a los endpoints sin antes haber realizado el login y ser portador de un token. 
 * **403 FORBIDDEN** Cuando se intentan llevar a cabo acciones a las cuales el usuario no tiene acceso.
+* **500 INTERNAL SERVER ERROR** Cuando salta una excepción desconocida a la hora de realizar una acción.
+
+
+
 
