@@ -16,20 +16,20 @@ CREATE TABLE Pokemons (
     tipo2 VARCHAR(15),
     habilidad VARCHAR(30) NOT NULL,
     legendario BOOLEAN NOT NULL,
-    generacion INTEGER NOT NULL
+    generacion INTEGER NOT NULL CHECK (generacion BETWEEN 1 AND 9)
 );
 ```
 
-| **Campo**       | **Valor**        | **RESTRICCIONES** |
-|-----------------|------------------|-------------------|
-| **idPokemon**   | INTEGER          | PRIMARY KEY       |
-| **nombre**      | VARCHAR(100)     | NOT NULL          |
-| **descripcion** | VARCHAR(1000)    | NOT NULL          |
-| **tipo1**       | VARCHAR(15)      | NOT NULL          |
-| **tipo2**       | VARCHAR(15)      |                   |
-| **habilidad**   | VARCHAR(30)      | NOT NULL          |
-| **legendario**  | BOOLEAN          | NOT NULL          |
-| **generacion**  | INTEGER          | NOT NULL          |
+| **Campo**       | **Valor**        | **RESTRICCIONES**                           |
+|-----------------|------------------|---------------------------------------------|
+| **idPokemon**   | INTEGER          | PRIMARY KEY                                 |
+| **nombre**      | VARCHAR(100)     | NOT NULL                                    |
+| **descripcion** | VARCHAR(1000)    | NOT NULL                                    |
+| **tipo1**       | VARCHAR(15)      | NOT NULL                                    |
+| **tipo2**       | VARCHAR(15)      |                                             |
+| **habilidad**   | VARCHAR(30)      | NOT NULL                                    |
+| **legendario**  | BOOLEAN          | NOT NULL                                    |
+| **generacion**  | INTEGER          | NOT NULL CHECK( GENERACION BETWEEN 1 AND 9) |
 
 ### **_Comprobaciones en la capa service_**
 
@@ -58,15 +58,15 @@ CREATE TABLE Movimientos (
 );
 ```
 
-| **Campo**       | **Valor**      | **RESTRICCIONES** |
-|-----------------|----------------|-------------------|
-| **nombre**      | VARCHAR(100)   | PRIMARY KEY       |
-| **descripcion** | VARCHAR(1000)  | NOT NULL          |
-| **tipo**        | VARCHAR(15)    | NOT NULL          |
-| **categoria**   | VARCHAR(30)    | NOT NULL          |
-| **potencia**    | INTEGER(3)     | NOT NULL          |
-| **precision**   | INTEGER(3)     | NOT NULL          |
-| **usos**        | INTEGER(2)     | NOT NULL          |
+| **Campo**       | **Valor**      | **RESTRICCIONES**                            |
+|-----------------|----------------|----------------------------------------------|
+| **nombre**      | VARCHAR(100)   | PRIMARY KEY                                  |
+| **descripcion** | VARCHAR(1000)  | NOT NULL                                     |
+| **tipo**        | VARCHAR(15)    | NOT NULL                                     |
+| **categoria**   | VARCHAR(30)    | NOT NULL                                     |
+| **potencia**    | INTEGER(3)     | NOT NULL  CEHCK (POTENCIA BETWEEN 0 AND 99)  |
+| **precision**   | INTEGER(3)     | NOT NULL  CEHCK (PRECISION BETWEEN 0 AND 99) |
+| **usos**        | INTEGER(2)     | NOT NULL  CEHCK (USOS BETWEEN 0 AND 99)      |
 
 
 ### **_Comprobaciones en la capa service_**
@@ -86,7 +86,7 @@ CREATE TABLE Usuarios (
   idUsuario INTEGER PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   password VARCHAR(50) NOT NULL,
-  rol VARCHAR(25)
+  rol VARCHAR(25) NOT NULL
 );
 ```
 
@@ -95,7 +95,7 @@ CREATE TABLE Usuarios (
 | **idUsuario**  | INTEGER        | PRIMARY KEY       |
 | **username**   | VARCHAR(50)    | NOT NULL          |
 | **password**   | VARCHAR(50)    | NOT NULL          |
-| **roles**      | VARCHAR(25)    |                   |
+| **roles**      | VARCHAR(25)    | NOT NULL          |
 
 ## Modelo Entidad - Relación ##
 

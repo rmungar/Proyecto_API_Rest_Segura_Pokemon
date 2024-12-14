@@ -159,7 +159,7 @@ class MovimientoService {
         var validType = false
         var formattedType = ""
         for (type in Tipos.entries){
-            if (type.spanish == tipo){
+            if (type.spanish == tipo.uppercase()){
                 validType = true
                 formattedType = type.original
             }
@@ -187,12 +187,12 @@ class MovimientoService {
             return listaFinal
         }
         else{
-            if (categoria.isNotEmpty()){
+            if (categoria.isEmpty()){
                 throw ParameterException("La categoria: $categoria no existe o no es válida.")
+            }else{
+                throw ParameterException("El tipo: $tipo no existe o no es válido.")
             }
-            throw ParameterException("El tipo: $tipo no existe o no es válido.")
         }
-
     }
 
     fun updateMovimiento(id: String, movimiento: Movimiento): Movimiento? {

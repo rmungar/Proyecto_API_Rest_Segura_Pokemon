@@ -62,6 +62,7 @@ class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT,"/usuarios/usuario").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE,"/usuarios/{id}").hasRole("ADMIN")
                     .anyRequest().authenticated()
+
             } // LOS RECURSOS PROTEGIDO Y PUBLICOS
             .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } //
