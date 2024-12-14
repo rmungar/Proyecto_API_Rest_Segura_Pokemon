@@ -46,6 +46,7 @@ class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT,"/pokemon/{id}").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.POST,"/pokemon/{id}").hasRole("ADMIN")
                     .requestMatchers("/pokemon/tipo/{tipo}").permitAll()
+                    .requestMatchers("/pokemon/generacion/{generacion}").permitAll()
 
                     .requestMatchers(HttpMethod.GET,"/movimientos/").permitAll()
                     .requestMatchers(HttpMethod.POST,"/movimientos/").authenticated()

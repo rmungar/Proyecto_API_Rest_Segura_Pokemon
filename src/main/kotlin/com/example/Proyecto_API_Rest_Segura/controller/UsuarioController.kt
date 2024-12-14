@@ -68,9 +68,10 @@ class UsuarioController {
     @DeleteMapping("/usuario/{id}")
     fun deleteUser(
         @PathVariable("id") id: Int?
-    ){
+    ): ResponseEntity<Any?> {
         if (id != null) {
             usuarioService.deleteUser(id)
+            return ResponseEntity(HttpStatus.OK)
         }
         else{
             throw ParameterException("El parámetro id no puede estar vacío.")
