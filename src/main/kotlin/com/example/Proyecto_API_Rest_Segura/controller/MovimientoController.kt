@@ -16,6 +16,7 @@ class MovimientoController {
     @Autowired
     private lateinit var movimientoService: MovimientoService
 
+
     @PostMapping("/")
     fun RepoblateDataBase(): ResponseEntity<Any?> {
         try{
@@ -26,6 +27,19 @@ class MovimientoController {
             return ResponseEntity<Any?>(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
 
+    }
+
+    @PostMapping("/movimientos")
+    fun addMovimiento(
+        @RequestBody movimiento: Movimiento?
+    ): ResponseEntity<Any?> {
+        if(movimiento != null){
+            movimientoService.addMovimiento(movimiento)
+            return ResponseEntity(movimiento, HttpStatus.CREATED)
+        }
+        else{
+            throw ParameterException("El parámetro movimiento no puede estar vacío")
+        }
     }
 
     @GetMapping("/{id}")
@@ -68,11 +82,11 @@ class MovimientoController {
                     return ResponseEntity<Any?>(listaMovimientos, HttpStatus.OK)
                 }
                 else {
-                    return ResponseEntity<Any?>("CATEGORÍA INEXISTENTE", HttpStatus.BAD_REQUEST)
+                    throw ParameterException("La categoría $categoria no existe.")
                 }
             }
             else{
-                return ResponseEntity<Any?>("LA CATEGORÍA NO PUEDE SER NULA O ESTAR VACÍA", HttpStatus.BAD_REQUEST)
+                throw ParameterException("La categoría $categoria no puede estar vacia o ser nula.")
             }
         }
         catch (e:Exception){
@@ -91,7 +105,7 @@ class MovimientoController {
                 return ResponseEntity<Any?>(listaMovimientos, HttpStatus.OK)
             }
             else{
-                return ResponseEntity<Any?>("LA CATEGORÍA NO PUEDE SER NULA O ESTAR VACÍA", HttpStatus.BAD_REQUEST)
+                throw ParameterException("El tipo $tipo no existe.")
             }
         }
         catch (e:Exception){
@@ -105,15 +119,13 @@ class MovimientoController {
         @PathVariable("categoria") categoria: String?,
         @PathVariable("tipo") tipo: String?
     ): ResponseEntity<Any?>{
-        try {
-            if (!categoria.isNullOrEmpty() && !tipo.isNullOrEmpty()){
-                val listaMovimientos = movimientoService.filtradoPorCategoriaYTipo(categoria, tipo)
-                return ResponseEntity(listaMovimientos, HttpStatus.OK)
-            }
-            return ResponseEntity("NI LA CATEGORÍA NI EL TIPO PUEDEN SER NULOS O ESTAR VACÍOS",HttpStatus.BAD_REQUEST) // TODO(CREAR UNA NUEVA EXCEPTION PARA CUANDO EL VALOR INGRESADO NO ES CORRECTO)
+
+        if (!categoria.isNullOrEmpty() && !tipo.isNullOrEmpty()){
+            val listaMovimientos = movimientoService.filtradoPorCategoriaYTipo(categoria, tipo)
+            return ResponseEntity(listaMovimientos, HttpStatus.OK)
         }
-        catch (e:Exception){
-            return ResponseEntity<Any?>(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        else{
+            throw ParameterException("Los valores de categoría y tipo no pueden estar vacíos o ser nulos")
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.Proyecto_API_Rest_Segura.services
 
+import com.example.Proyecto_API_Rest_Segura.exception.AlreadyFullException
 import com.example.Proyecto_API_Rest_Segura.exception.FileNotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.NotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
@@ -23,6 +24,9 @@ class PokemonService {
     private lateinit var movimientoService: MovimientoService
 
     fun poblatePokemonTable(){
+        if (pokemonRepository.count() > 0) {
+            throw AlreadyFullException("Pokémon")
+        }
         try{
             val pokemonFilePath = "src/main/resources/static/pokemon.txt"
             val pokemonList = mutableListOf<Pokemon>()
@@ -55,6 +59,8 @@ class PokemonService {
                                     habilidad = abilities.getOrElse(0) { "" },
                                     legendario = isLegendary,
                                     generacion = generation
+
+
                                 )
                             } else {
                                 Pokemon(
@@ -128,9 +134,92 @@ class PokemonService {
                 pokemonRepository.save(it)
             }
         }
+
         catch (e: NullPointerException){
-            throw FileNotFoundException("src/main/resources/static/pokemon.txt")
+            throw FileNotFoundException("src/main/resources/static/pokemon.txt" +  e.stackTraceToString())
         }
+    }
+
+    fun addPokemon(pokemon: Pokemon){
+
+        var pokemonConElMismoId = false
+        pokemonRepository.findAll().forEach {
+            if (it.nombre == pokemon.nombre){
+                pokemonConElMismoId = true
+            }
+        }
+        if (pokemonConElMismoId) {
+            throw ParameterException("Ya existe un pokemon con el nombre ${pokemon.nombre}")
+        }
+        else{
+            if (pokemon.nombre == ""){
+                throw ParameterException("El nombre del pokémon no puede estar vacío.")
+            }
+            if (pokemon.descripcion == ""){
+                throw ParameterException("La descripción del pokémon no puede estar vacía.")
+            }
+            if (pokemon.generacion !in 1..9){
+                throw ParameterException("La generación ${pokemon.generacion} no existe.")
+            }
+            if (pokemon.habilidad == ""){
+                throw ParameterException("La habilidad del pokémon no puede estar vacía.")
+            }
+
+            if (pokemon.tipo1 == ""){
+                throw ParameterException("Un pokémon debe tener mínimo un tipo")
+            }
+            else {
+                var valid = false
+                for (entry in Tipos.entries) {
+                    if (pokemon.tipo1.uppercase() == entry.spanish || pokemon.tipo1.uppercase() == entry.original){
+                        pokemon.tipo1 = entry.original
+                        valid = true
+                    }
+                }
+                if (!valid){
+                    throw ParameterException("El tipo ${pokemon.tipo1} no existe.")
+                }
+            }
+            if (pokemon.tipo2 != null && pokemon.tipo2 != ""){
+                var valid = false
+                for (entry in Tipos.entries) {
+                    if (pokemon.tipo2!!.uppercase() == entry.spanish || pokemon.tipo2!!.uppercase() == entry.original){
+                        pokemon.tipo2 = entry.original
+                        valid = true
+                    }
+                }
+                if (!valid){
+                    throw ParameterException("El tipo ${pokemon.tipo2} no existe.")
+                }
+            }
+            else{
+                pokemon.tipo2 = null
+            }
+            if (pokemon.movimientos.isEmpty() || pokemon.movimientos.size < 4){
+                throw ParameterException("Un pokémon ha de tener 4 movimientos.")
+            }
+            else{
+                for (movimiento in pokemon.movimientos){
+                    val mov = movimientoService.getMovimiento(movimiento)
+                    if (mov == null){
+                        throw ParameterException("El movimiento $movimiento no existe, creelo primero.")
+                    }
+                    else{
+                        if (mov.tipo != pokemon.tipo1.uppercase()){
+                            throw ParameterException("El pokémon no puede aprender este movimiento: $movimiento.")
+                        }
+                        else if (pokemon.tipo2 != null && pokemon.tipo2 != "" && mov.tipo != pokemon.tipo2?.uppercase()){
+                            throw ParameterException("El pokémon no puede aprender este movimiento: $movimiento.")
+                        }
+                    }
+                }
+            }
+            pokemon.idPokemon = null
+            pokemonRepository.save(pokemon)
+        }
+
+
+
     }
 
     fun getPokemonById(id: Int): PokemonFormateado? {
@@ -261,6 +350,67 @@ class PokemonService {
 
     fun updatePokemon(id: Int, pokemon: Pokemon): Pokemon{
         val existingPokemon = pokemonRepository.findById(id)
+
+        if (pokemon.descripcion == ""){
+            throw ParameterException("La descripción del pokémon no puede estar vacía.")
+        }
+        if (pokemon.generacion !in 1..9){
+            throw ParameterException("La generación ${pokemon.generacion} no existe.")
+        }
+        if (pokemon.habilidad == ""){
+            throw ParameterException("La habilidad del pokémon no puede estar vacía.")
+        }
+
+        if (pokemon.tipo1 == ""){
+            throw ParameterException("Un pokémon debe tener mínimo un tipo")
+        }
+        else {
+            var valid = false
+            for (entry in Tipos.entries) {
+                if (pokemon.tipo1.uppercase() == entry.spanish || pokemon.tipo1.uppercase() == entry.original){
+                    pokemon.tipo1 = entry.original
+                    valid = true
+                }
+            }
+            if (!valid){
+                throw ParameterException("El tipo ${pokemon.tipo1} no existe.")
+            }
+        }
+        if (pokemon.tipo2 != null && pokemon.tipo2 != ""){
+            var valid = false
+            for (entry in Tipos.entries) {
+                if (pokemon.tipo2!!.uppercase() == entry.spanish || pokemon.tipo2!!.uppercase() == entry.original){
+                    pokemon.tipo2 = entry.original
+                    valid = true
+                }
+            }
+            if (!valid){
+                throw ParameterException("El tipo ${pokemon.tipo2} no existe.")
+            }
+        }
+        else{
+            pokemon.tipo2 = null
+        }
+        if (pokemon.movimientos.isEmpty() || pokemon.movimientos.size < 4){
+            throw ParameterException("Un pokémon ha de tener 4 movimientos.")
+        }
+        else{
+            for (movimiento in pokemon.movimientos){
+                val mov = movimientoService.getMovimiento(movimiento)
+                if (mov == null){
+                    throw ParameterException("El movimiento $movimiento no existe, creelo primero.")
+                }
+                else{
+                    if (mov.tipo != pokemon.tipo1.uppercase()){
+                        throw ParameterException("El pokémon no puede aprender este movimiento: $movimiento.")
+                    }
+                    else if (pokemon.tipo2 != null && pokemon.tipo2 != "" && mov.tipo != pokemon.tipo2?.uppercase()){
+                        throw ParameterException("El pokémon no puede aprender este movimiento: $movimiento.")
+                    }
+                }
+            }
+        }
+
 
         existingPokemon.ifPresent {
             it.descripcion = pokemon.descripcion

@@ -41,7 +41,8 @@ class SecurityConfig {
             .authorizeHttpRequests {
                 it
                     .requestMatchers(HttpMethod.GET,"/pokemon/").permitAll()
-                    .requestMatchers(HttpMethod.POST,"/pokemon/").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/pokemon/pokemon").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST,"/pokemon/").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET,"/pokemon/{id}").permitAll()
                     .requestMatchers(HttpMethod.PUT,"/pokemon/{id}").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.POST,"/pokemon/{id}").hasRole("ADMIN")
@@ -49,7 +50,8 @@ class SecurityConfig {
                     .requestMatchers("/pokemon/generacion/{generacion}").permitAll()
 
                     .requestMatchers(HttpMethod.GET,"/movimientos/").permitAll()
-                    .requestMatchers(HttpMethod.POST,"/movimientos/").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/movimientos/").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST,"/movimientos/movimientos").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET,"/movimientos/{id}").permitAll()
                     .requestMatchers(HttpMethod.PUT,"/movimientos/{id}").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.POST,"/movimientos/{id}").hasRole("ADMIN")

@@ -17,6 +17,7 @@ class APIExceptionHandler {
         NumberFormatException::class,
         ParameterException::class,
         AuthenticationException::class,
+        AlreadyFullException::class,
     )
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody

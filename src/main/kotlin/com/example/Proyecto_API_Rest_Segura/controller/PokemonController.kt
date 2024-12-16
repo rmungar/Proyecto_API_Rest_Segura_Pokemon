@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/pokemon")
 class PokemonController {
 
+
     @Autowired
     private lateinit var pokemonService : PokemonService
 
@@ -30,6 +31,19 @@ class PokemonController {
 
     }
 
+
+    @PostMapping("/pokemon")
+    fun AddPokemon(
+        @RequestBody pokemon: Pokemon?
+    ): ResponseEntity<Any?>{
+        if(pokemon != null){
+            pokemonService.addPokemon(pokemon)
+            return ResponseEntity(pokemon, HttpStatus.CREATED)
+        }
+        else{
+            throw ParameterException("El parámetro pokémon no puede estar vacío o ser nulo.")
+        }
+    }
 
     @GetMapping("/{id}")
     fun GetPokemonById(

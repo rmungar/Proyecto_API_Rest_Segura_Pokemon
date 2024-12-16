@@ -1,5 +1,6 @@
 package com.example.Proyecto_API_Rest_Segura.services
 
+import com.example.Proyecto_API_Rest_Segura.exception.AlreadyFullException
 import com.example.Proyecto_API_Rest_Segura.exception.FileNotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.NotFoundException
 import com.example.Proyecto_API_Rest_Segura.exception.ParameterException
@@ -19,6 +20,9 @@ class MovimientoService {
 
 
     fun populateMovimientosTable(){
+        if (movimientoRepository.count() > 0) {
+            throw AlreadyFullException("Movimientos")
+        }
         try {
             val movimientoFilePath = "src/main/resources/static/moves.txt"
             val moveList = mutableListOf<Movimiento>()
@@ -116,7 +120,7 @@ class MovimientoService {
             }
 
             moveList.forEach {
-                movimientoRepository.save(it)
+                addMovimiento(it)
             }
         }
         catch (e: NullPointerException) {
@@ -124,6 +128,63 @@ class MovimientoService {
         }
 
 
+    }
+
+    fun addMovimiento(movimiento: Movimiento){
+        val movimientoExistente = movimientoRepository.findByIdOrNull(movimiento.nombreMovimiento)
+        if (movimientoExistente != null) {
+            throw ParameterException("Ya existe un movimiento con el nombre ${movimiento.nombreMovimiento}.")
+        }
+        else{
+            if (movimiento.nombreMovimiento == ""){
+                throw ParameterException("El nombre del movimiento no puede estar vacío.")
+            }
+            if (movimiento.usos !in 0..99){
+                throw ParameterException("Los usos ${movimiento.usos} no se encuentran en el rango 1..99")
+            }
+            if (movimiento.categoria == "") {
+                throw ParameterException("La catégoria del movimiento no puede estar vacía.")
+            }
+            else{
+                if (movimiento.categoria.uppercase() != "FISICO" && movimiento.categoria.uppercase() != "ESPECIAL" && movimiento.categoria.uppercase() != "ESTADO" && movimiento.categoria.uppercase() != "PHYSICAL" && movimiento.categoria.uppercase() != "SPECIAL" && movimiento.categoria.uppercase() != "STATUS") {
+                    throw ParameterException("La categoría del movimiento ha de ser FISICO, ESPECIAL O ESTADO.")
+                }
+                else{
+                    when (movimiento.categoria.uppercase()){
+                        "FISICO" -> {
+                            movimiento.categoria = "Physical"
+                        }
+                        "ESPECIAL" -> {
+                            movimiento.categoria = "Special"
+                        }
+                        "ESTADO" -> {
+                            movimiento.categoria = "Status"
+                        }
+                        else -> {
+                            movimiento.categoria = movimiento.categoria.uppercase()
+                        }
+                    }
+
+                }
+            }
+            if (movimiento.potencia !in 0..999){
+                throw ParameterException("La potencia ${movimiento.potencia} no se encuentra en el rango 0..999.")
+            }
+            if (movimiento.precision !in 0..100){
+                throw ParameterException("La precision ${movimiento.precision} no se encuentra en el rango 0..100.")
+            }
+            var valid = false
+            for (entry in Tipos.entries) {
+                if (movimiento.tipo.uppercase() == entry.spanish || movimiento.tipo.uppercase() == entry.original){
+                    movimiento.tipo = entry.original
+                    valid = true
+                }
+            }
+            if (!valid){
+                throw ParameterException("El tipo ${movimiento.tipo} no existe.")
+            }
+            movimientoRepository.save(movimiento)
+        }
     }
 
     fun getMovimiento(id: String): Movimiento?{

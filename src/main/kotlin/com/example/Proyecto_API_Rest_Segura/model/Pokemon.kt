@@ -8,7 +8,7 @@ import jakarta.persistence.*
 class Pokemon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val idPokemon: Int?,
+    var idPokemon: Int?,
     @Column(nullable = false)
     val nombre: String,
     @Column(nullable = false ,length = 1000)
