@@ -2,7 +2,8 @@
 
 # La idea
   La idea de esta API consiste en una "implementación" de la *PokéAPI* de forma mas sencilla. En mi caso, cuento con un archivo de texto plano en el cual figuran todos los datos de todos y cada uno de los     pokemons y movimientos. Por lo que he pensado poblar la base de datos con los datos que ya hay en los documentos para luego poder realizar las llamadas pertinentes. La idea sería una aplicación muy          parecida a la DataDex o la wiki de pokémon.
-
+> [!WARNING]
+> Para probar la base de datos: Crea un usuario con rol ADMIN, ahora usa los dos endpoints POST de movimientos y pokemon.
   
 # Las tablas
 ##   **Pokemons**
